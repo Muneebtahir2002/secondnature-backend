@@ -83,7 +83,7 @@ app.use(
   }).single("image"),
 );
 app.use("/images", express.static(path.join(__dirname, "..", "images")));
-app.use("/api", routes);
+app.use("", routes);
 // After all routes (KEEP this at the bottom)
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   if (err instanceof multer.MulterError) {
