@@ -18,9 +18,11 @@ import blogTagRoutes from "../controllers/blogTags/routes";
 import profileRoutes from "../controllers/profileController/routes";
 import { superAdminOnly } from "../middleware/superAdminOnly";
 import { verifyToken } from "../middleware/verifyToken";
-
+import publicformRoutes from "../controllers/contact-forms/publicRoutes";
+import formRoutes from "../controllers/contact-forms/routes";
+import teamRoutes from "../controllers/team-members/routes";
 const router = express.Router();
-
+router.use("/form", publicformRoutes)
 router.use("/client/blogs", blogPublicRoutes);
 // router.use("/google-reviews", googleRoutes);
 router.post("/auth/login", login);
@@ -36,6 +38,8 @@ router.use("/ctas", ctaRoutes);
 router.use("/blog-ctas", blogCtaRoutes);
 router.use("/blog-tags", blogTagRoutes);
 router.use("/users", superAdminOnly, userRoutes);
+router.use("/common-form", formRoutes)
+router.use("/team-members", teamRoutes)
 router.use("/profile", verifyToken, profileRoutes);
 
 export default router;
