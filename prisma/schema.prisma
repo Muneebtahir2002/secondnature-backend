@@ -16,6 +16,12 @@ enum Role {
   ADMIN
 }
 
+enum TeamMemberCategory {
+  CLINICAL
+  EDUCATION
+  BOTH
+}
+
 /**
  * ========================= Core Models =========================
  */
@@ -161,4 +167,57 @@ model BlogCTA {
   @@index([blogId])
   @@index([ctaId])
   @@map("blog_cta")
+}
+
+model CommonForm {
+  id      Int    @id @default(autoincrement())
+  email   String
+  name    String
+  contact String
+  inquiry String
+  message String
+
+  @@map("common_form")
+}
+
+/**
+ * ========================= Team Members =========================
+ * Field order kept as per frontend form
+ */
+model TeamMember {
+  id          Int                @id @default(autoincrement())
+  fullName    String             @db.VarChar(255)
+  degree      String             @db.VarChar(255)
+  designation String             @db.VarChar(255)
+  category    TeamMemberCategory
+  description String             @db.Text
+  pictureUrl  String             @db.VarChar(500)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  @@map("team_member")
+}
+
+model Poster {
+  id          Int     @id @default(autoincrement())
+  imageUrl    String  @db.VarChar(500)
+  title       String? @db.VarChar(255)
+  description String? @db.Text
+
+  // close / cross button
+  showCloseButton Boolean @default(true)
+
+  // button 1
+  buttonOneText String? @db.VarChar(100)
+  buttonOneUrl  String? @db.VarChar(500)
+
+  // button 2
+  buttonTwoText String? @db.VarChar(100)
+  buttonTwoUrl  String? @db.VarChar(500)
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("poster")
 }

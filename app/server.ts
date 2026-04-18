@@ -9,11 +9,11 @@ import cors, { CorsOptionsDelegate } from "cors";
 import multer, { FileFilterCallback } from "multer";
 import { startBlogScheduler } from "./cron/publishScheduledBlogs";
 import { ErrorRequestHandler } from "express";
+import { generateImageFileName } from "./utils/generate-image-name";
 // define variables
-
 const envirnoment = app_conf.env.nodeEnv;
 const allowedOrigins = [
-  "https://www.htsol.ca",
+  "http://localhost:3000",
   "https://blogs.htsol.ca",
   // "http://localhost:5173",
   // "http://localhost:5174",
@@ -36,10 +36,8 @@ const fileStorage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     // Generate a unique filename using a timestamp and the original file extension
-    const timestamp = new Date().toISOString().replace(/[-:.]/g, "");
-    const fileExtension = path.extname(file.originalname); // Get the file extension (.jpg, .png, etc.)
-    const newFilename = `author-image-${timestamp}${fileExtension}`; // Rename the file
 
+    const newFilename = generateImageFileName(file.originalname);
     cb(null, newFilename); // Provide the new filename to multer
   },
 });
@@ -83,7 +81,7 @@ app.use(
   }).single("image"),
 );
 app.use("/images", express.static(path.join(__dirname, "..", "images")));
-app.use("", routes);
+app.use("/api", routes);
 // After all routes (KEEP this at the bottom)
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   if (err instanceof multer.MulterError) {

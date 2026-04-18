@@ -17,7 +17,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       data: null,
     });
   }
-
+  console.log("here")
   try {
     let user = await prisma.users.findFirst({
       where: {
@@ -225,7 +225,7 @@ export const resetPassword = async (
       return;
     }
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
 
     await prisma.users.update({
       where: { id: user.id },
