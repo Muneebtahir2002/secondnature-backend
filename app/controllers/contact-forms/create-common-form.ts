@@ -11,19 +11,20 @@ export const createCommonForm = async (
     email,
     name,
     enquiry,
+    inquiry,
+    message,
     firstName,
     lastName,
     contact,
-    city,
-    service,
-    companyUrl,
-    page,
   } = req.body;
 
   const finalFirstName = firstName?.trim() || "";
   const finalLastName = lastName?.trim() || "";
   const fullName =
     name?.trim() || `${finalFirstName} ${finalLastName}`.trim();
+
+  const finalInquiry = inquiry?.trim() || enquiry?.trim() || "";
+  const finalMessage = message?.trim() || "";
 
   if (!email) {
     res.status(400).json({
@@ -54,9 +55,17 @@ export const createCommonForm = async (
     return;
   }
 
-  if (!page) {
+  if (!finalInquiry) {
     res.status(400).json({
-      messages: [{ type: "error", message: "Please provide page" }],
+      messages: [{ type: "error", message: "Please provide inquiry" }],
+      data: null,
+    });
+    return;
+  }
+
+  if (!finalMessage) {
+    res.status(400).json({
+      messages: [{ type: "error", message: "Please provide message" }],
       data: null,
     });
     return;
@@ -68,36 +77,27 @@ export const createCommonForm = async (
         email,
         name: fullName,
         contact,
-        city: city || null,
-        service: service || null,
-        companyUrl: companyUrl || null,
-        enquiry,
-        page,
+        inquiry: finalInquiry,
+        message: finalMessage,
       },
       select: {
         id: true,
         email: true,
         name: true,
         contact: true,
-        city: true,
-        service: true,
-        companyUrl: true,
-        enquiry: true,
-        page: true,
+        inquiry: true,
+        message: true,
       },
     });
 
     const html = await renderEmailTemplate("common-form", {
       email,
-      fullName: fullName,
+      fullName,
       firstName: finalFirstName || null,
       lastName: finalLastName || null,
       contactNumber: contact,
-      city,
-      services: service,
-      companyName: companyUrl,
-      message: enquiry,
-      page,
+      inquiry: finalInquiry,
+      message: finalMessage,
     });
 
     await transporter.sendMail({
@@ -115,11 +115,8 @@ First Name: ${finalFirstName || "N/A"}
 Last Name: ${finalLastName || "N/A"}
 Email: ${email}
 Contact: ${contact}
-City: ${city || "N/A"}
-Service: ${service || "N/A"}
-Company URL: ${companyUrl || "N/A"}
-Enquiry: ${enquiry}
-Page: ${page}
+Inquiry: ${finalInquiry}
+Message: ${finalMessage}
       `.trim(),
     });
 

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html data-editor-version="2" class="sg-campaigns">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <style type="text/css">
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff !important;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgb(0, 0, 0, 0.1);
+      }
+
+      .logo {
+        text-align: center;
+        margin-bottom: 20px;
+        border-bottom: 3px solid #e8ecef;
+        background-color: #000000;
+        padding: 20px;
+        border-radius: 10px;
+      }
+
+      .logo img {
+        max-width: 200px;
+        height: auto;
+      }
+
+      .greetings {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .invitation-message {
+        margin-bottom: 20px;
+        padding: 10px;
+        border-radius: 10px;
+      }
+
+      p {
+        font-size: 16px;
+        line-height: 24px;
+      }
+
+      .hello-text {
+        font-weight: 600;
+        text-transform: capitalize;
+      }
+
+      .heading_name {
+        text-transform: capitalize;
+      }
+
+      .bold-text {
+        font-weight: 600;
+      }
+
+      .text-color {
+        color: #636571;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container" style="margin: 8px auto">
+      <div class="logo">
+        <img
+          src="https://htsols.vercel.app/_next/image?url=%2Ffooter-logo.webp&w=384&q=75"
+          alt="HtSol Logo"
+        />
+      </div>
+
+      <div class="invitation-message">
+        <p class="text-color bold-text">Dear Dr FaseehUllah,</p>
+        <p>You have a new enquiry from the website.</p>
+
+        <% if (firstName) { %>
+          <p><span class="bold-text">First Name:</span> <%= firstName %></p>
+        <% } %>
+
+        <% if (lastName) { %>
+          <p><span class="bold-text">Last Name:</span> <%= lastName %></p>
+        <% } %>
+
+        <% if (fullName) { %>
+          <p><span class="bold-text">Name:</span> <%= fullName %></p>
+        <% } %>
+
+        <% if (contactNumber) { %>
+          <p><span class="bold-text">Contact Number:</span> <%= contactNumber %></p>
+        <% } %>
+
+        <% if (email) { %>
+          <p><span class="bold-text">Email:</span> <%= email %></p>
+        <% } %>
+
+        <% if (inquiry) { %>
+          <p><span class="bold-text">Inquiry:</span> <%= inquiry %></p>
+        <% } %>
+
+        <% if (message) { %>
+          <p><span class="bold-text">Message:</span></p>
+          <p style="padding: 12px; border-left: 4px solid #d0d0d0; font-style: italic;">
+            <%= message %>
+          </p>
+        <% } %>
+
+        <p class="text-color bold-text">Thank you</p>
+      </div>
+    </div>
+  </body>
+</html>

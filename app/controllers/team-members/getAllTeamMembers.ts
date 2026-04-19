@@ -59,7 +59,7 @@ export const getAllTeamMembers = async (
                     designation: true,
                     category: true,
                     description: true,
-                    imageUrl: true,
+                    pictureUrl: true,
                     createdAt: true,
                     updatedAt: true,
                 },

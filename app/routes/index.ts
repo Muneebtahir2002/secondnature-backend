@@ -21,6 +21,7 @@ import { verifyToken } from "../middleware/verifyToken";
 import publicformRoutes from "../controllers/contact-forms/publicRoutes";
 import formRoutes from "../controllers/contact-forms/routes";
 import teamRoutes from "../controllers/team-members/routes";
+import posterRoutes from "../controllers/poster/routes";
 const router = express.Router();
 router.use("/form", publicformRoutes)
 router.use("/client/blogs", blogPublicRoutes);
@@ -41,5 +42,5 @@ router.use("/users", superAdminOnly, userRoutes);
 router.use("/common-form", formRoutes)
 router.use("/team-members", teamRoutes)
 router.use("/profile", verifyToken, profileRoutes);
-
+router.use("/poster", posterRoutes)
 export default router;

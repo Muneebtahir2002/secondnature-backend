@@ -190,7 +190,7 @@ model TeamMember {
   degree      String             @db.VarChar(255)
   designation String             @db.VarChar(255)
   category    TeamMemberCategory
-  description String             @db.Text
+  description String             @db.LongText
   pictureUrl  String             @db.VarChar(500)
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt

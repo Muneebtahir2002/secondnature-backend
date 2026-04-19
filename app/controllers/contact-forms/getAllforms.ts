@@ -14,16 +14,14 @@ export const getAllCommonForms = async (
   try {
     const where = search
       ? {
-          OR: [
-            { name: { contains: search } },
-            { email: { contains: search } },
-            { contact: { contains: search } },
-            { city: { contains: search } },
-            { service: { contains: search } },
-            { companyUrl: { contains: search } },
-            { page: { contains: search } },
-          ],
-        }
+        OR: [
+          { name: { contains: search } },
+          { email: { contains: search } },
+          { contact: { contains: search } },
+          { inquiry: { contains: search } },
+          { message: { contains: search } },
+        ],
+      }
       : {};
 
     const [forms, total] = await Promise.all([
@@ -39,10 +37,8 @@ export const getAllCommonForms = async (
           email: true,
           name: true,
           contact: true,
-          city: true,
-          service: true,
-          companyUrl: true,
-          page: true,
+          inquiry: true,
+          message: true,
         },
       }),
       prisma.commonForm.count({ where }),
