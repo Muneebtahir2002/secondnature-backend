@@ -13,7 +13,7 @@ import { generateImageFileName } from "./utils/generate-image-name";
 // define variables
 const envirnoment = app_conf.env.nodeEnv;
 const allowedOrigins = [
-  "http://localhost:3000",
+  "https://second-nature-frontend-swart.vercel.app",
   "https://blogs.htsol.ca",
   // "http://localhost:5173",
   // "http://localhost:5174",
@@ -21,6 +21,7 @@ const allowedOrigins = [
   // app_conf.env.userAppUrl,
 ];
 const app = express();
+app.set("trust proxy", 1);
 if (envirnoment === "development") {
   dotenv.config({ path: path.resolve(__dirname, `../.env.${envirnoment}`) });
 } else {
@@ -60,17 +61,23 @@ const fileFlter = (
 };
 // configure CORS middleware
 const corsOptions: CorsOptionsDelegate = (req, callback) => {
-  let corsOptions;
-  if (allowedOrigins.indexOf(req.headers.origin!) !== -1) {
-    corsOptions = { origin: true };
+  const origin = req.headers.origin;
+
+  if (!origin || allowedOrigins.includes(origin)) {
+    callback(null, {
+      origin: true,
+      credentials: true,
+    });
   } else {
-    corsOptions = { origin: true };
+    callback(new Error("Not allowed by CORS"), {
+      origin: false,
+    });
   }
-  callback(null, corsOptions);
 };
+
 app.use(cors(corsOptions));
 
-const port = 4000;
+const port = 4001;
 app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ limit: "20mb", extended: true }));
 app.use(
@@ -81,6 +88,9 @@ app.use(
   }).single("image"),
 );
 app.use("/images", express.static(path.join(__dirname, "..", "images")));
+app.get("/", (req, res) => {
+  res.send("Second Nature is live");
+});
 app.use("/api", routes);
 // After all routes (KEEP this at the bottom)
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
