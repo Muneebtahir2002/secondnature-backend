@@ -15,7 +15,7 @@ const envirnoment = app_conf.env.nodeEnv;
 const allowedOrigins = [
   "https://second-nature-frontend-swart.vercel.app",
   "https://second-nature-tau.vercel.app",
-  // "http://localhost:5173",
+  "http://localhost:3000",
   // "http://localhost:5174",
   // app_conf.env.adminAppUrl,
   // app_conf.env.userAppUrl,
