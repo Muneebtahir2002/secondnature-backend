@@ -26,6 +26,8 @@ export const getAllTeamMembersWebsite = async (
                     category: true,
                     description: true,
                     pictureUrl: true,
+                    educationPosition: true,
+                    clinicalPosition: true,
                     createdAt: true,
                     updatedAt: true,
                 },
