@@ -27,15 +27,75 @@ export const updateCTA = async (req: Request, res: Response): Promise<void> => {
       // fs.renameSync(req.file.path, `path/to/your/uploads/${newFilename}`);
     } // Optionally, move the uploaded file to a new location with the new filename
 
+    const safeHeading =
+      typeof heading === "string" ? heading.trim() || null : existing.heading;
+
+    const safeParagraph =
+      typeof paragraph === "string"
+        ? paragraph.trim() || null
+        : existing.paragraph;
+
+    const safeButtonText =
+      typeof buttonText === "string"
+        ? buttonText.trim() || null
+        : existing.buttonText;
+
+    const safeButtonHref =
+      typeof buttonHref === "string"
+        ? buttonHref.trim() || null
+        : existing.buttonHref;
+
+    if (safeButtonText && !safeButtonHref) {
+      res.status(400).json({
+        messages: [
+          {
+            type: "error",
+            message: "Please provide button href when button text is given.",
+          },
+        ],
+        data: null,
+      });
+      return;
+    }
+
+    if (safeButtonHref && !safeButtonText) {
+      res.status(400).json({
+        messages: [
+          {
+            type: "error",
+            message: "Please provide button text when button href is given.",
+          },
+        ],
+        data: null,
+      });
+      return;
+    }
+
+    const hasAnyCTAContent =
+      safeHeading || safeParagraph || imageUrl || (safeButtonText && safeButtonHref);
+
+    if (!hasAnyCTAContent) {
+      res.status(400).json({
+        messages: [
+          {
+            type: "error",
+            message: "CTA cannot be empty.",
+          },
+        ],
+        data: null,
+      });
+      return;
+    }
+
     // 3. Perform the update
     const updated = await prisma.cTA.update({
       where: { id: Number(id) },
       data: {
         imageUrl,
-        heading: heading ? heading.trim() : existing.heading,
-        paragraph: paragraph ? paragraph.trim() : existing.paragraph,
-        buttonText: buttonText ? buttonText.trim() : existing.buttonText,
-        buttonHref: buttonHref ? buttonHref.trim() : existing.buttonHref,
+        heading: safeHeading,
+        paragraph: safeParagraph,
+        buttonText: safeButtonText,
+        buttonHref: safeButtonHref,
         isActive: typeof isActive === "boolean" ? isActive : existing.isActive,
       },
       select: {

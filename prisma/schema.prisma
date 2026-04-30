@@ -142,8 +142,8 @@ model CTA {
   imageUrl   String?
   heading    String?  @db.VarChar(255)
   paragraph  String?  @db.Text
-  buttonText String   @db.VarChar(100)
-  buttonHref String   @db.VarChar(500)
+  buttonText String?  @db.VarChar(100)
+  buttonHref String?  @db.VarChar(500)
   isActive   Boolean  @default(true)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -185,16 +185,20 @@ model CommonForm {
  * Field order kept as per frontend form
  */
 model TeamMember {
-  id          Int                @id @default(autoincrement())
-  fullName    String             @db.VarChar(255)
-  degree      String?            @db.VarChar(255)
-  designation String?            @db.VarChar(255)
-  category    TeamMemberCategory
-  description String?            @db.LongText
-  pictureUrl  String             @db.VarChar(500)
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
+  id                Int                @id @default(autoincrement())
+  fullName          String             @db.VarChar(255)
+  degree            String?            @db.VarChar(255)
+  designation       String?            @db.VarChar(255)
+  category          TeamMemberCategory
+  description       String?            @db.LongText
+  clinicalPosition  Int?
+  educationPosition Int?
+  pictureUrl        String             @db.VarChar(500)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
 
+  @@unique([clinicalPosition])
+  @@unique([educationPosition])
   @@map("team_member")
 }
 
