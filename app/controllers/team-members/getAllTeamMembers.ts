@@ -62,6 +62,8 @@ export const getAllTeamMembers = async (
                     pictureUrl: true,
                     createdAt: true,
                     updatedAt: true,
+                    educationPosition: true,
+                    clinicalPosition: true,
                 },
             }),
             prisma.teamMember.count({ where }),
