@@ -50,7 +50,7 @@ export const getAllTeamMembers = async (
                 skip,
                 take: limit,
                 orderBy: {
-                    id: "desc",
+                    id: "asc",
                 },
                 select: {
                     id: true,
@@ -62,6 +62,8 @@ export const getAllTeamMembers = async (
                     pictureUrl: true,
                     createdAt: true,
                     updatedAt: true,
+                    educationPosition: true,
+                    clinicalPosition: true,
                 },
             }),
             prisma.teamMember.count({ where }),

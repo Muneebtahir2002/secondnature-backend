@@ -7,7 +7,15 @@ export const createTeamMember = async (
     res: Response,
 ): Promise<void> => {
     try {
-        const { fullName, degree, designation, category, description } = req.body;
+        const {
+            fullName,
+            degree,
+            designation,
+            category,
+            description,
+            clinicalPosition,
+            educationPosition,
+        } = req.body;
 
         if (!fullName?.trim()) {
             res.status(400).json({
@@ -74,6 +82,99 @@ export const createTeamMember = async (
             return;
         }
 
+        const normalizedClinicalPosition =
+            clinicalPosition !== undefined && clinicalPosition !== null && clinicalPosition !== ""
+                ? Number(clinicalPosition)
+                : null;
+
+        const normalizedEducationPosition =
+            educationPosition !== undefined && educationPosition !== null && educationPosition !== ""
+                ? Number(educationPosition)
+                : null;
+
+        if (
+            normalizedCategory === TeamMemberCategory.CLINICAL &&
+            (!normalizedClinicalPosition || Number.isNaN(normalizedClinicalPosition))
+        ) {
+            res.status(400).json({
+                messages: [{ type: "error", message: "Clinical position is required." }],
+                data: null,
+            });
+            return;
+        }
+
+        if (
+            normalizedCategory === TeamMemberCategory.EDUCATION &&
+            (!normalizedEducationPosition || Number.isNaN(normalizedEducationPosition))
+        ) {
+            res.status(400).json({
+                messages: [{ type: "error", message: "Education position is required." }],
+                data: null,
+            });
+            return;
+        }
+
+        if (
+            normalizedCategory === TeamMemberCategory.BOTH &&
+            (
+                !normalizedClinicalPosition ||
+                Number.isNaN(normalizedClinicalPosition) ||
+                !normalizedEducationPosition ||
+                Number.isNaN(normalizedEducationPosition)
+            )
+        ) {
+            res.status(400).json({
+                messages: [
+                    {
+                        type: "error",
+                        message: "Clinical position and education position are required.",
+                    },
+                ],
+                data: null,
+            });
+            return;
+        }
+        if (normalizedClinicalPosition) {
+            const existingClinicalPosition = await prisma.teamMember.findFirst({
+                where: {
+                    clinicalPosition: normalizedClinicalPosition,
+                },
+            });
+
+            if (existingClinicalPosition) {
+                res.status(400).json({
+                    messages: [
+                        {
+                            type: "error",
+                            message: "This clinical position is already assigned to another team member.",
+                        },
+                    ],
+                    data: null,
+                });
+                return;
+            }
+        }
+
+        if (normalizedEducationPosition) {
+            const existingEducationPosition = await prisma.teamMember.findFirst({
+                where: {
+                    educationPosition: normalizedEducationPosition,
+                },
+            });
+
+            if (existingEducationPosition) {
+                res.status(400).json({
+                    messages: [
+                        {
+                            type: "error",
+                            message: "This education position is already assigned to another team member.",
+                        },
+                    ],
+                    data: null,
+                });
+                return;
+            }
+        }
         const pictureUrl = `${process.env.ADMIN_APP_URI}/images/${req.file.filename}`;
 
         const teamMember = await prisma.teamMember.create({
@@ -84,6 +185,8 @@ export const createTeamMember = async (
                 category: normalizedCategory as TeamMemberCategory,
                 description: description.trim(),
                 pictureUrl,
+                clinicalPosition: normalizedClinicalPosition,
+                educationPosition: normalizedEducationPosition,
             },
         });
 

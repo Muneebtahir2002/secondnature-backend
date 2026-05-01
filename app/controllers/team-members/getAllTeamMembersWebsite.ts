@@ -16,7 +16,7 @@ export const getAllTeamMembersWebsite = async (
                 skip,
                 take: limit,
                 orderBy: {
-                    id: "desc",
+                    id: "asc",
                 },
                 select: {
                     id: true,
@@ -26,6 +26,8 @@ export const getAllTeamMembersWebsite = async (
                     category: true,
                     description: true,
                     pictureUrl: true,
+                    educationPosition: true,
+                    clinicalPosition: true,
                     createdAt: true,
                     updatedAt: true,
                 },
